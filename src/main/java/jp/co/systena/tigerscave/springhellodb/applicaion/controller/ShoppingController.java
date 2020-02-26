@@ -119,8 +119,7 @@ public class ShoppingController {
    * @return
    */
   @RequestMapping(value = "/deleteitem", method = RequestMethod.GET) // URLとのマッピング
-  public String update(@RequestParam(name = "item_id", required = true) String itemId,
-      Model model) {
+  public String update(@RequestParam(name = "item_id", required = true) String itemId,Model model) {
 
 
     // 本来はここで入力チェックなど
@@ -148,9 +147,7 @@ public class ShoppingController {
    * @return
    */
   @RequestMapping(value = "/additem", method = RequestMethod.POST) // URLとのマッピング
-  public String insert(@Valid Item form,
-                        BindingResult result,
-                        Model model) {
+  public String insert(@Valid Item form,BindingResult result,Model model) {
 
     //画面入力値にエラーがない場合
     if (!result.hasErrors()) {
