@@ -2,18 +2,13 @@ package jp.co.systena.tigerscave.springhellodb.applicaion.controller;
 
 import java.util.List;
 import javax.servlet.http.HttpSession;
-import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import jp.co.systena.tigerscave.springhellodb.applicaion.model.Item;
-import jp.co.systena.tigerscave.springhellodb.applicaion.model.ItemListForm;
 import jp.co.systena.tigerscave.springhellodb.applicaion.service.ListService;
 
 @Controller // Viewあり。Viewを返却するアノテーション
@@ -23,7 +18,7 @@ public class ShoppingController {
   @Autowired
   HttpSession session;// セッション管理
   @Autowired
-  private  ListService listService; // サービスクラス
+  private ListService listService; // サービスクラス
   @Autowired
   private  JdbcTemplate jdbcTemplate;//DB
 
@@ -36,11 +31,12 @@ public class ShoppingController {
   @RequestMapping(value = "/list", method = RequestMethod.GET) // URLとのマッピング
   public ModelAndView list(ModelAndView mav) {
 
+
     // 商品一覧取得
-    List<Item> itemList = listService.getItemList();
+    List<Item> items = listService.getItemList();
 
     // テンプレートに渡す内容を設定
-    mav.addObject("itemList", itemList);
+    mav.addObject("items", items);
 
     // Viewのテンプレート名を設定
     mav.setViewName("ListView");
@@ -74,7 +70,7 @@ public class ShoppingController {
    * @param result
    * @param model
    * @return
-   */
+
   @RequestMapping(value = "/list", method = RequestMethod.POST) // URLとのマッピング
   public String update(@Valid ItemListForm listForm,BindingResult result,Model model) {
 
@@ -107,7 +103,7 @@ public class ShoppingController {
 
     return "itemlist";
 
-  }
+  }*/
 
   /**
    * 「削除」リンク押下時の処理
@@ -117,7 +113,7 @@ public class ShoppingController {
    * @param itemId
    * @param model
    * @return
-   */
+
   @RequestMapping(value = "/deleteitem", method = RequestMethod.GET) // URLとのマッピング
   public String update(@RequestParam(name = "item_id", required = true) String itemId,Model model) {
 
@@ -132,7 +128,7 @@ public class ShoppingController {
 
     return "redirect:/itemlist";
 
-  }
+  } */
 
 
 
@@ -145,7 +141,7 @@ public class ShoppingController {
    * @param result
    * @param model
    * @return
-   */
+
   @RequestMapping(value = "/additem", method = RequestMethod.POST) // URLとのマッピング
   public String insert(@Valid Item form,BindingResult result,Model model) {
 
@@ -165,7 +161,7 @@ public class ShoppingController {
 
     return "redirect:/itemlist";
 
-  }
+  }*/
 
 
 

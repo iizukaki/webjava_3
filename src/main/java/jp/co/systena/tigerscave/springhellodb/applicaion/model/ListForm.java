@@ -8,18 +8,18 @@ import javax.validation.constraints.Min;
 public class ListForm {
 
   /** 商品ID */
-  private int itemId;
+  private int item_id;
 
   /** 個数 */
   @Min(1) //設定できる最小値を定義
   private int num;
 
   public int getItemId() {
-    return itemId;
+    return item_id;
   }
 
-  public void setItemId(int itemId) {
-    this.itemId = itemId;
+  public void setItemId(int item_id) {
+    this.item_id = item_id;
   }
 
   public int getNum() {

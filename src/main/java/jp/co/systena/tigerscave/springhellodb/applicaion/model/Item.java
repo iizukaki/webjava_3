@@ -5,18 +5,18 @@ import javax.validation.constraints.Pattern;
 public class Item {
 
   @Pattern(regexp="^[0-9]*$")
-  private String itemId;
+  private String item_id;
   public String getItemId() {
-    return itemId;
+    return item_id;
   }
-  public void setItemId(String itemId) {
-    this.itemId = itemId;
+  public void setItemId(String item_id) {
+    this.item_id = item_id;
   }
   public String getItemName() {
-    return itemName;
+    return item_name;
   }
-  public void setItemName(String itemName) {
-    this.itemName = itemName;
+  public void setItemName(String item_name) {
+    this.item_name = item_name;
   }
   public String getPrice() {
     return price;
@@ -24,7 +24,7 @@ public class Item {
   public void setPrice(String price) {
     this.price = price;
   }
-  private String itemName;
+  private String item_name;
   @Pattern(regexp="^[0-9]*$")
   private String price;
 }

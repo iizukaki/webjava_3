@@ -1,6 +1,5 @@
 package jp.co.systena.tigerscave.springhellodb.applicaion.service;
 
-
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -8,7 +7,9 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import jp.co.systena.tigerscave.springhellodb.applicaion.model.Item;
 
-
+/**
+ * The Class ListService.
+ */
 @Service
 public class ListService {
 
@@ -18,14 +19,14 @@ private  JdbcTemplate jdbcTemplate;
 /**
  * データベースからアイテムデータ一覧を取得する
  *
- * @return
+ * @return 商品一覧
  */
 public List<Item> getItemList() {
 
   //SELECTを使用してテーブルの情報をすべて取得する
-  List<Item> list = jdbcTemplate.query("SELECT * FROM items ORDER BY item_id", new BeanPropertyRowMapper<Item>(Item.class));
+  List<Item> itemlist = jdbcTemplate.query("SELECT * FROM items ORDER BY item_id", new BeanPropertyRowMapper<Item>(Item.class));
 
-  return list;
+  return itemlist;
 
   /*
   //結果はMapのリストとして取得することもできる
