@@ -1,35 +1,42 @@
 package jp.co.systena.tigerscave.springhellodb.applicaion.model;
 
+import javax.validation.constraints.Pattern;
+
 /**
  * The Class Order.
  */
 public class Order {
+  @Pattern(regexp="^[0-9]*$")
+  private String item_id;
+  private String item_name;
+  @Pattern(regexp="^[0-9]*$")
+  private int price;
+  private String item_count;
 
-  /** 商品ID */
-  private int itemId;
-
+  public @Pattern(regexp = "^[0-9]*$") @Pattern(regexp = "^[0-9]*$") String getItemId() {
+    return item_id;
+  }
+  public void setItemId(@Pattern(regexp = "^[0-9]*$") @Pattern(regexp = "^[0-9]*$") String item_id) {
+    this.item_id = item_id;
+  }
+  public String getItemName() {
+    return item_name;
+  }
+  public void setItemName(String item_name) {
+    this.item_name = item_name;
+  }
+  public int getPrice() {
+    return price;
+  }
+  public void setPrice(@Pattern(regexp = "^[0-9]*$") int price) {
+    this.price = price;
+  }
   /** 個数 */
-  private int num;
-
-  public Order(int itemId, int num) {
-    this.itemId = itemId;
-    this.num = num;
+  public String getItemCount() {
+    return item_count;
   }
-
-  public int getItemId() {
-    return itemId;
-  }
-
-  public void setItemId(int itemId) {
-    this.itemId = itemId;
-  }
-
-  public int getNum() {
-    return num;
-  }
-
-  public void setNum(int num) {
-    this.num = num;
+  public void setItemCount(String item_count) {
+    this.item_count = item_count;
   }
 
 }
