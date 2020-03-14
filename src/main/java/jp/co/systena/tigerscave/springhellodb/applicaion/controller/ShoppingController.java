@@ -9,9 +9,15 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import jp.co.systena.tigerscave.springhellodb.applicaion.model.Cart;
+import jp.co.systena.tigerscave.springhellodb.applicaion.model.DeleteForm;
+import jp.co.systena.tigerscave.springhellodb.applicaion.model.Item;
+import jp.co.systena.tigerscave.springhellodb.applicaion.model.ListForm;
 import jp.co.systena.tigerscave.springhellodb.applicaion.model.Order;
 import jp.co.systena.tigerscave.springhellodb.applicaion.service.ListService;
 
@@ -22,9 +28,9 @@ public class ShoppingController {
   @Autowired
   HttpSession session;// セッション管理
   @Autowired
-  private ListService listService; // サービスクラス
+  ListService listService; // サービスクラス
   @Autowired
-  private  JdbcTemplate jdbcTemplate;//DB
+  JdbcTemplate jdbcTemplate;//DB
 
   /**
    * 商品一覧画面表示
@@ -37,10 +43,10 @@ public class ShoppingController {
 
 
     // 商品一覧取得
-    List<Map<String, Object>> itemListMap = listService.getItemList();
+    List<Map<String, Object>> itemList = listService.getItemList();
 
     // テンプレートに渡す内容を設定
-    mav.addObject("items", itemListMap);
+    mav.addObject("itemList", itemList);
 
     // Viewのテンプレート名を設定
     mav.setViewName("ListView");
@@ -57,7 +63,7 @@ public class ShoppingController {
    * @param bindingResult the binding result
    * @return the model and view
 */
-/**
+
   @RequestMapping(value = "/list", method = RequestMethod.POST) // URLとのマッピング
   public ModelAndView order(ModelAndView mav, @Validated ListForm listForm,BindingResult bindingResult) {
 
@@ -65,7 +71,7 @@ public class ShoppingController {
       // リクエストパラメータにエラーがある場合は商品一覧画面を表示
 
       List<Map<String, Object>> itemListMap = listService.getItemList();
-      mav.addObject("items", itemListMap);
+      mav.addObject("itemList", itemListMap);
 
       // Viewのテンプレート名を設定
       mav.setViewName("ListView");
@@ -75,7 +81,7 @@ public class ShoppingController {
     }
       // 注文内容をカートに追加
       Cart cart = getCart();
-      cart.addOrder(listForm.getItemId(), listForm.getItemCount());
+      cart.addOrder(listForm.getItem_id(), listForm.getItem_name());
 
       // データをセッションへ保存
       session.setAttribute("cart", cart);
@@ -83,22 +89,14 @@ public class ShoppingController {
       return new ModelAndView("redirect:/cart"); // リダイレクト
 
 
-    }*/
-
-
-
-
-
+    }
 
   /**
    * カートの内容を表示する
    *
    * @param mav the mav
    * @return the model and view
-
-
-
-  @SuppressWarnings({"unchecked", "unlikely-arg-type"})
+*/
   @RequestMapping(value = "/cart", method = RequestMethod.GET) // URLとのマッピング
   public ModelAndView cart(ModelAndView mav) {
 
@@ -108,14 +106,16 @@ public class ShoppingController {
 
     // 商品一覧をテンプレートに渡す。※商品名、価格を表示するため
     List<Map<String, Object>> itemListMap = listService.getItemList();
-    mav.addObject("items", itemListMap);
+    mav.addObject("itemList", itemListMap);
 
     // 合計金額計算
     int totalPrice = 0;
+    int iPrice = 0;
     for (Order order : cart.getOrderList()) {
-      if (((Map<String, Object>) itemListMap).containsKey(order.getItemId())) {
-        totalPrice += order.getItemCount() * ((Item) itemListMap.get(order.getItemId())).getPrice();
-      }
+      System.out.println(order);
+      iPrice = 0;
+      iPrice = Integer.parseInt(itemListMap.get(order.getItemId()).get("price").toString());
+      totalPrice += iPrice  * order.getNum();
     }
     mav.addObject("totalPrice", totalPrice);
 
@@ -123,7 +123,7 @@ public class ShoppingController {
     mav.setViewName("CartView");
 
     return mav;
-  } */
+  }
   /**
    * 注文内容削除する
    *
@@ -131,7 +131,7 @@ public class ShoppingController {
    * @param deleteForm the delete form
    * @param bindingResult the binding result
    * @return the model and view
-
+ */
 
   @RequestMapping(value = "/cart", method = RequestMethod.POST) // URLとのマッピング
   public ModelAndView deleteOrder(ModelAndView mav, @Validated DeleteForm deleteForm,
@@ -149,13 +149,13 @@ public class ShoppingController {
     }
 
     return new ModelAndView("redirect:/cart"); // リダイレクト
-  }   */
+  }
 
   /**
    * セッションからカートを取得する
    *
    * @return the cart
-
+*/
 
   private Cart getCart() {
     Cart cart = (Cart) session.getAttribute("cart");
@@ -165,7 +165,7 @@ public class ShoppingController {
     }
 
     return cart;
-  }*/
+  }
 
   /**
    * 初期表示用
@@ -175,12 +175,12 @@ public class ShoppingController {
    * @param model
    * @return
 
-  @RequestMapping(value = "/itemlist", method = RequestMethod.GET) // URLとのマッピング
+  @RequestMapping(value = "/list", method = RequestMethod.GET) // URLとのマッピング
   public String index(Model model) {
 
     model.addAttribute("items", getItemList());
 
-    return "itemlist";
+    return "list";
   }*/
 
 
@@ -195,7 +195,7 @@ public class ShoppingController {
    * @param model
    * @return
 
-  @RequestMapping(value = "/cart", method = RequestMethod.POST) // URLとのマッピング
+  @RequestMapping(value = "/list", method = RequestMethod.POST) // URLとのマッピング
   public String update(@Valid ItemListForm listForm,BindingResult result,Model model) {
 
     // listFormに画面で入力したデータが入っているので取得する
@@ -215,15 +215,16 @@ public class ShoppingController {
           //item_idをキーに名称と価格を更新する
           //SQL文字列中の「?」の部分に、後ろで指定した変数が埋め込まれる
           int updateCount = jdbcTemplate.update(
-              "UPDATE items SET item_count = ? WHERE item_id = ?",
-              item.getItemCount(),item.getItemId());
-
+              "UPDATE items SET item_name = ?, price = ? WHERE item_id = ?",
+              item.getItemName(),
+              item.getPrice(),
+              item.getItemId());
 
         }
       }
     }
 
-    return "cart";
+    return "list";
 
   }*/
 
@@ -235,7 +236,7 @@ public class ShoppingController {
    * @param itemId
    * @param model
    * @return
-
+*/
   @RequestMapping(value = "/deleteitem", method = RequestMethod.GET) // URLとのマッピング
   public String update(@RequestParam(name = "item_id", required = true) String itemId,Model model) {
 
@@ -245,12 +246,12 @@ public class ShoppingController {
 
       // パラメータで受けとったアイテムIDのデータを削除する
     // SQL文字列中の「?」の部分に、後ろで指定した変数が埋め込まれる
-    int deleteCount = jdbcTemplate.update("DELETE FROM Carts WHERE item_id = ?", Integer.parseInt(itemId));
+    int deleteCount = jdbcTemplate.update("DELETE FROM items WHERE item_id = ?", Integer.parseInt(itemId));
 
 
-    return "redirect:/Cart";
+    return "redirect:/list";
 
-  } */
+  }
 
 
 
@@ -261,11 +262,11 @@ public class ShoppingController {
    *
    * @param form
    * @param result
-   * @param model
+   * @param service
    * @return
 */
-  @RequestMapping(value = "/@{/additem}", method = RequestMethod.POST) // URLとのマッピング
-  public String insert(@Valid Order form,BindingResult result,Model model) {
+  @RequestMapping(value = "/additem", method = RequestMethod.POST) // URLとのマッピング
+  public String insert(@Valid Item form,BindingResult result,Model model) {
 
     //画面入力値にエラーがない場合
     if (!result.hasErrors()) {
@@ -273,12 +274,14 @@ public class ShoppingController {
           //1行分の値をデータベースにINSERTする
           //SQL文字列中の「?」の部分に、後ろで指定した変数が埋め込まれる
           int insertCount = jdbcTemplate.update(
-                "INSERT INTO Carts VALUES( ?, ? )",
-                Integer.parseInt(form.getItemId()),Integer.parseInt(form.getItemCount()));
-
+              "INSERT INTO items VALUES( ?, ?, ? )",
+              Integer.parseInt(form.getItemId()),
+              form.getName(),
+              Integer.parseInt(form.getPrice())
+            );
     }
 
-    return "redirect:/itemList";
+    return "redirect:/list";
 
   }
 

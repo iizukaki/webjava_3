@@ -1,5 +1,5 @@
 package jp.co.systena.tigerscave.springhellodb.applicaion.model;
-
+/*
 import java.util.List;
 import javax.validation.Valid;
 
@@ -15,4 +15,4 @@ public class ItemListForm {
   public void setItemList(List<Item> itemList) {
     this.itemList = itemList;
   }
-}
+}*/
