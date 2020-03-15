@@ -4,6 +4,8 @@ package jp.co.systena.tigerscave.springhellodb.applicaion.model;
  * The Class Order.
  */
 public class Order {
+  public static final String getPrice = null;
+
   /** 商品ID */
   private int itemId;
 
